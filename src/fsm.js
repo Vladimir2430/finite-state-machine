@@ -3,7 +3,9 @@ class FSM {
      * Creates new FSM instance.
      * @param config
      */
-    constructor(config) {}
+    constructor(config) {
+    
+    }
 
     /**
      * Returns active state.
