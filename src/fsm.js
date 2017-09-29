@@ -8,7 +8,7 @@ class FSM {
         this.bbb=config.initial;
         this.arr=[this.bbb];
         this.ccc=0;
-        this.wasCalled;
+        this.ddd;
         this.redoDisabled;
     }
 
