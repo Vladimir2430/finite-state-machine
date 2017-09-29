@@ -63,7 +63,7 @@ class FSM {
      * @param event
      * @returns {Array}
      */
-    getStates(event) {
+    getaaa(event) {
         let arr2=[];
         if(arguments.length!=0){
             for(let sss in this.aaa){
@@ -120,4 +120,39 @@ module.exports = FSM;
 
 /** @Created by Uladzimir Halushka **/
 
+const config = {
+    initial: 'normal',
+    aaa: {
+        normal: {
+            transitions: {
+                study: 'busy',
+            }
+        },
+        busy: {
+            transitions: {
+                get_tired: 'sleeping',
+                get_hungry: 'hungry',
+            }
+        },
+        hungry: {
+            transitions: {
+                eat: 'normal'
+            },
+        },
+        sleeping: {
+            transitions: {
+                get_hungry: 'hungry',
+                get_up: 'normal',
+            },
+        },
+    }
+};
 
+
+(function(){
+
+            const student = new FSM(config);
+
+            student.trigger('study');
+            console.log(student.getState()+'busy');
+})()
