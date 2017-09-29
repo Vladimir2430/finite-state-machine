@@ -8,7 +8,7 @@ class FSM {
         this.bbb=config.initial;
         this.arr=[this.bbb];
         this.ccc=0;
-        this.redoDisabled;
+        this.ddd;
     }
 
     /**
@@ -27,7 +27,7 @@ class FSM {
         if(this.states.hasOwnProperty(state)){
             this.bbb=state;
             this.arr.push(this.bbb);
-            this.redoDisabled=true;
+            this.ddd=true;
         }
         else throw new Error();
     }
@@ -41,7 +41,7 @@ class FSM {
             if(transition===event){
                 this.bbb=this.states[this.bbb].transitions[event];
                 this.arr.push(this.bbb);
-                this.redoDisabled=true;
+                this.ddd=true;
                 return;
             }
         }
@@ -87,7 +87,7 @@ class FSM {
         if((this.arr.length-this.ccc)>1){
             this.ccc++;
             this.bbb=this.arr[this.arr.length-1-this.ccc];
-            this.redoDisabled=false;
+            this.ddd=false;
             return true;
         }
         else return false;
@@ -99,7 +99,7 @@ class FSM {
      * @returns {Boolean}
      */
     redo() {
-        if((!this.redoDisabled)&&(this.ccc>0)) {
+        if((!this.ddd)&&(this.ccc>0)) {
                 this.ccc--;
                 this.bbb=this.arr[this.arr.length-1-this.ccc];
                 return true;
