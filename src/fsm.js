@@ -27,7 +27,7 @@ class FSM {
     changeState(state) {
         if(this.aaa.hasOwnProperty(state)){
             this.bbb=state;
-            this.arr.push(this.curState);
+            this.arr.push(this.bbb);
             this.eee=true;
         }
         else throw new Error();
