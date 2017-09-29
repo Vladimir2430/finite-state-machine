@@ -7,7 +7,7 @@ class FSM {
         this.states=config.states;
         this.bbb=config.initial;
         this.arr=[this.bbb];
-        this.tailIndex=0;
+        this.ccc=0;
         this.wasCalled;
         this.redoDisabled;
     }
@@ -85,9 +85,9 @@ class FSM {
      * @returns {Boolean}
      */
     undo() {
-        if((this.arr.length-this.tailIndex)>1){
-            this.tailIndex++;
-            this.bbb=this.arr[this.arr.length-1-this.tailIndex];
+        if((this.arr.length-this.ccc)>1){
+            this.ccc++;
+            this.bbb=this.arr[this.arr.length-1-this.ccc];
             this.redoDisabled=false;
             return true;
         }
@@ -100,9 +100,9 @@ class FSM {
      * @returns {Boolean}
      */
     redo() {
-        if((!this.redoDisabled)&&(this.tailIndex>0)) {
-                this.tailIndex--;
-                this.bbb=this.arr[this.arr.length-1-this.tailIndex];
+        if((!this.redoDisabled)&&(this.ccc>0)) {
+                this.ccc--;
+                this.bbb=this.arr[this.arr.length-1-this.ccc];
                 return true;
         }
         else return false;
@@ -111,7 +111,7 @@ class FSM {
     /**
      * Clears transition history
      */
-    clearHistory() {this.arr=[];this.tailIndex=0;}
+    clearHistory() {this.arr=[];this.ccc=0;}
 }
 
 module.exports = FSM;
