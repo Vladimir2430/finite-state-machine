@@ -6,7 +6,7 @@ class FSM {
     constructor(config) {
         this.states=config.states;
         this.bbb=config.initial;
-        this.histArray=[this.bbb];
+        this.arr=[this.bbb];
         this.tailIndex=0;
         this.wasCalled;
         this.redoDisabled;
@@ -27,7 +27,7 @@ class FSM {
     changeState(state) {
         if(this.states.hasOwnProperty(state)){
             this.bbb=state;
-            this.histArray.push(this.bbb);
+            this.arr.push(this.bbb);
             this.redoDisabled=true;
         }
         else throw new Error();
@@ -41,7 +41,7 @@ class FSM {
         for(let transition in this.states[this.bbb].transitions){
             if(transition===event){
                 this.bbb=this.states[this.bbb].transitions[event];
-                this.histArray.push(this.bbb);
+                this.arr.push(this.bbb);
                 this.redoDisabled=true;
                 return;
             }
@@ -54,7 +54,7 @@ class FSM {
      */
     reset() {
         this.bbb="normal";
-        this.histArray=[this.curState];
+        this.arr=[this.bbb];
     }
 
     /**
@@ -85,9 +85,9 @@ class FSM {
      * @returns {Boolean}
      */
     undo() {
-        if((this.histArray.length-this.tailIndex)>1){
+        if((this.arr.length-this.tailIndex)>1){
             this.tailIndex++;
-            this.bbb=this.histArray[this.histArray.length-1-this.tailIndex];
+            this.bbb=this.arr[this.arr.length-1-this.tailIndex];
             this.redoDisabled=false;
             return true;
         }
@@ -102,7 +102,7 @@ class FSM {
     redo() {
         if((!this.redoDisabled)&&(this.tailIndex>0)) {
                 this.tailIndex--;
-                this.bbb=this.histArray[this.histArray.length-1-this.tailIndex];
+                this.bbb=this.arr[this.arr.length-1-this.tailIndex];
                 return true;
         }
         else return false;
@@ -111,7 +111,7 @@ class FSM {
     /**
      * Clears transition history
      */
-    clearHistory() {this.histArray=[];this.tailIndex=0;}
+    clearHistory() {this.arr=[];this.tailIndex=0;}
 }
 
 module.exports = FSM;
