@@ -4,12 +4,13 @@ class FSM {
      * @param config
      */
     constructor(config) {
-        this.aaa=config.aaa;
-        this.bbb=config.initial;
-        this.arr=[this.bbb];
-        this.ccc=0;
-        this.ddd;
-        this.eee;
+        this.states=config.states;
+        this.curState=config.initial;
+        //history
+        this.histArray=[this.curState];
+        this.tailIndex=0;
+        this.wasCalled;
+        this.redoDisabled;
     }
 
     /**
@@ -17,7 +18,7 @@ class FSM {
      * @returns {String}
      */
     getState() {
-        return this.bbb;
+        return this.curState;
     }
 
     /**
@@ -25,10 +26,10 @@ class FSM {
      * @param state
      */
     changeState(state) {
-        if(this.aaa.hasOwnProperty(state)){
-            this.bbb=state;
-            this.arr.push(this.bbb);
-            this.eee=true;
+        if(this.states.hasOwnProperty(state)){
+            this.curState=state;
+            this.histArray.push(this.curState);
+            this.redoDisabled=true;
         }
         else throw new Error();
     }
@@ -38,11 +39,11 @@ class FSM {
      * @param event
      */
     trigger(event) {
-        for(let hhh in this.aaa[this.bbb].transitions){
-            if(hhh===event){
-                this.bbb=this.aaa[this.bbb].transitions[event];
-                this.arr.push(this.bbb);
-                this.eee=true;
+        for(let transition in this.states[this.curState].transitions){
+            if(transition===event){
+                this.curState=this.states[this.curState].transitions[event];
+                this.histArray.push(this.curState);
+                this.redoDisabled=true;
                 return;
             }
         }
@@ -53,8 +54,8 @@ class FSM {
      * Resets FSM state to initial.
      */
     reset() {
-        this.bbb="normal";
-        this.arr=[this.bbb];
+        this.curState="normal";
+        this.histArray=[this.curState];
     }
 
     /**
@@ -64,20 +65,19 @@ class FSM {
      * @returns {Array}
      */
     getStates(event) {
-        let arr2=[];
+        let ar=[];
         if(arguments.length!=0){
-            for(let sss in this.aaa){
-                if(this.aaa[sss].transitions.hasOwnProperty(event)){
-                    arr2.push(sss);               
-                }
+            for(let stateName in this.states){
+                if(this.states[stateName].transitions.hasOwnProperty(event)){
+                    ar.push(stateName);                }
             }
         }
         else
-            for(let sss in this.aaa){
-                arr2.push(sss);
+            for(let stateName in this.states){
+                ar.push(stateName);
             }
 
-        return arr2;
+        return ar;
     }
 
     /**
@@ -86,10 +86,10 @@ class FSM {
      * @returns {Boolean}
      */
     undo() {
-        if((this.arr.length-this.ccc)>1){
-            this.ccc++;
-            this.bbb=this.arr[this.arr.length-1-this.ccc];
-            this.eee=false;
+        if((this.histArray.length-this.tailIndex)>1){
+            this.tailIndex++;
+            this.curState=this.histArray[this.histArray.length-1-this.tailIndex];
+            this.redoDisabled=false;
             return true;
         }
         else return false;
@@ -101,28 +101,26 @@ class FSM {
      * @returns {Boolean}
      */
     redo() {
-       if((!this.eee)&&(this.ccc>0)) {
-           this.ccc--;
-           this.bbb=this.arr[this.arr.length-1-this.ccc];
-           return true;
-       } else return false;
+        if((!this.redoDisabled)&&(this.tailIndex>0)) {
+                this.tailIndex--;
+                this.curState=this.histArray[this.histArray.length-1-this.tailIndex];
+                return true;
+        }
+        else return false;
     }
 
     /**
      * Clears transition history
      */
-    clearHistory() {
-        this.arr=[];this.ccc=0;
-    }
+    clearHistory() {this.histArray=[];this.tailIndex=0;}
 }
 
 module.exports = FSM;
 
 /** @Created by Uladzimir Halushka **/
-
 const config = {
     initial: 'normal',
-    aaa: {
+    states: {
         normal: {
             transitions: {
                 study: 'busy',
