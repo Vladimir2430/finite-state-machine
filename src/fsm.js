@@ -41,7 +41,7 @@ class FSM {
         for(let transition in this.states[this.bbb].transitions){
             if(transition===event){
                 this.bbb=this.states[this.bbb].transitions[event];
-                this.histArray.push(this.curState);
+                this.histArray.push(this.bbb);
                 this.redoDisabled=true;
                 return;
             }
