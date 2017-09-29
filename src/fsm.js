@@ -63,7 +63,7 @@ class FSM {
      * @param event
      * @returns {Array}
      */
-    getaaa(event) {
+    getStates(event) {
         let arr2=[];
         if(arguments.length!=0){
             for(let sss in this.aaa){
