@@ -8,7 +8,6 @@ class FSM {
         this.bbb=config.initial;
         this.arr=[this.bbb];
         this.ccc=0;
-        this.ddd;
         this.redoDisabled;
     }
 
