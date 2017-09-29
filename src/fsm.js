@@ -68,7 +68,7 @@ class FSM {
         if(arguments.length!=0){
             for(let sss in this.aaa){
                 if(this.aaa[sss].transitions.hasOwnProperty(event)){
-                    ar.push(sss);                }
+                    arr2.push(sss);                }
             }
         }
         else
