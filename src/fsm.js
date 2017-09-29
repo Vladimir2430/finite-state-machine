@@ -68,7 +68,8 @@ class FSM {
         if(arguments.length!=0){
             for(let sss in this.aaa){
                 if(this.aaa[sss].transitions.hasOwnProperty(event)){
-                    arr2.push(sss);                }
+                    arr2.push(sss);               
+                }
             }
         }
         else
@@ -101,11 +102,10 @@ class FSM {
      */
     redo() {
        if((!this.eee)&&(this.ccc>0)) {
-                this.ccc--;
-                this.bbb=this.arr[this.arr.length-1-this.ccc];
-                return true;
-        }
-        else return false;
+           this.ccc--;
+           this.bbb=this.arr[this.arr.length-1-this.ccc];
+           return true;
+       } else return false;
     }
 
     /**
