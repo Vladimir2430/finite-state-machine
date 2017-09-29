@@ -63,19 +63,19 @@ class FSM {
      * @returns {Array}
      */
     getStates(event) {
-        let ar=[];
+        let arr2=[];
         if(arguments.length!=0){
             for(let stateName in this.states){
                 if(this.states[stateName].transitions.hasOwnProperty(event)){
-                    ar.push(stateName);                }
+                    arr2.push(stateName);                }
             }
         }
         else
             for(let stateName in this.states){
-                ar.push(stateName);
+                arr2.push(stateName);
             }
 
-        return ar;
+        return arr2;
     }
 
     /**
