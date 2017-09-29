@@ -5,9 +5,8 @@ class FSM {
      */
     constructor(config) {
         this.states=config.states;
-        this.curState=config.initial;
-        //history
-        this.histArray=[this.curState];
+        this.bbb=config.initial;
+        this.histArray=[this.bbb];
         this.tailIndex=0;
         this.wasCalled;
         this.redoDisabled;
@@ -18,7 +17,7 @@ class FSM {
      * @returns {String}
      */
     getState() {
-        return this.curState;
+        return this.bbb;
     }
 
     /**
@@ -27,8 +26,8 @@ class FSM {
      */
     changeState(state) {
         if(this.states.hasOwnProperty(state)){
-            this.curState=state;
-            this.histArray.push(this.curState);
+            this.bbb=state;
+            this.histArray.push(this.bbb);
             this.redoDisabled=true;
         }
         else throw new Error();
@@ -39,9 +38,9 @@ class FSM {
      * @param event
      */
     trigger(event) {
-        for(let transition in this.states[this.curState].transitions){
+        for(let transition in this.states[this.bbb].transitions){
             if(transition===event){
-                this.curState=this.states[this.curState].transitions[event];
+                this.bbb=this.states[this.bbb].transitions[event];
                 this.histArray.push(this.curState);
                 this.redoDisabled=true;
                 return;
@@ -54,7 +53,7 @@ class FSM {
      * Resets FSM state to initial.
      */
     reset() {
-        this.curState="normal";
+        this.bbb="normal";
         this.histArray=[this.curState];
     }
 
@@ -88,7 +87,7 @@ class FSM {
     undo() {
         if((this.histArray.length-this.tailIndex)>1){
             this.tailIndex++;
-            this.curState=this.histArray[this.histArray.length-1-this.tailIndex];
+            this.bbb=this.histArray[this.histArray.length-1-this.tailIndex];
             this.redoDisabled=false;
             return true;
         }
@@ -103,7 +102,7 @@ class FSM {
     redo() {
         if((!this.redoDisabled)&&(this.tailIndex>0)) {
                 this.tailIndex--;
-                this.curState=this.histArray[this.histArray.length-1-this.tailIndex];
+                this.bbb=this.histArray[this.histArray.length-1-this.tailIndex];
                 return true;
         }
         else return false;
