@@ -37,8 +37,8 @@ class FSM {
      * @param event
      */
     trigger(event) {
-        for(let transition in this.states[this.bbb].transitions){
-            if(transition===event){
+        for(let hhh in this.states[this.bbb].transitions){
+            if(hhh===event){
                 this.bbb=this.states[this.bbb].transitions[event];
                 this.arr.push(this.bbb);
                 this.ddd=true;
