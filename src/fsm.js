@@ -25,7 +25,7 @@ class FSM {
      * @param state
      */
     changeState(state) {
-        if(this.states.hasOwnProperty(state)){
+        if(this.aaa.hasOwnProperty(state)){
             this.bbb=state;
             this.arr.push(this.curState);
             this.eee=true;
@@ -40,7 +40,7 @@ class FSM {
     trigger(event) {
         for(let hhh in this.aaa[this.bbb].transitions){
             if(hhh===event){
-                this.bbb=this.states[this.bbb].transitions[event];
+                this.bbb=this.aaa[this.bbb].transitions[event];
                 this.arr.push(this.bbb);
                 this.eee=true;
                 return;
@@ -66,13 +66,13 @@ class FSM {
     getStates(event) {
         let arr2=[];
         if(arguments.length!=0){
-            for(let sss in this.states){
-                if(this.states[sss].transitions.hasOwnProperty(event)){
+            for(let sss in this.aaa){
+                if(this.aaa[sss].transitions.hasOwnProperty(event)){
                     ar.push(sss);                }
             }
         }
         else
-            for(let sss in this.states){
+            for(let sss in this.aaa){
                 arr2.push(sss);
             }
 
