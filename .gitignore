@@ -5,3 +5,4 @@ app.bundle.js.map
 npm-debug*
 .idea
 *.bundle.js
+package-lock.json

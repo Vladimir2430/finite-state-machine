@@ -1,154 +1,69 @@
-class FSM {
-    /**
-     * Creates new FSM instance.
-     * @param config
-     */
-    constructor(config) {
-        this.states=config.states;
-        this.bbb=config.initial;
-        this.arr=[this.bbb];
-        this.ccc=0;
-        this.ddd;
+module.exports = class FSM {
+  constructor(config) {
+    this.states = config.states;
+    this.initial= config.initial;
+    this.arr    = [this.initial];
+    this.count  = 0;
+    this.bul    = true;
+  }
+
+  getState() {
+    return this.initial;
+  }
+
+  changeState(state) {
+    if (this.states.hasOwnProperty(state)) {
+      this.initial = state;
+      this.arr.push(this.initial);
+      this.bul = true;
+    } else throw new Error();
+  }
+
+  trigger(event) {
+    for (let i in this.states[this.initial].transitions) {
+      if (i === event) {
+        this.initial = this.states[this.initial].transitions[event];
+        this.arr.push(this.initial);
+        this.bul = true;
+        return;
+      }
     }
+    throw new Error();
+  }
 
-    /**
-     * Returns active state.
-     * @returns {String}
-     */
-    getState() {
-        return this.bbb;
+  reset() {
+    this.initial = "normal";
+  }
+
+  getStates(event) {
+    let arrEvent = [];
+    for (let i in this.states) {
+      if (arguments.length > 0 && this.states[i].transitions.hasOwnProperty(event) || arguments.length === 0) {
+        arrEvent.push(i);
+      }
     }
+    return arrEvent;
+  }
 
-    /**
-     * Goes to specified state.
-     * @param state
-     */
-    changeState(state) {
-        if(this.states.hasOwnProperty(state)){
-            this.bbb=state;
-            this.arr.push(this.bbb);
-            this.ddd=true;
-        }
-        else throw new Error();
-    }
+  undo() {
+    if (this.arr.length - this.count > 1) {
+      this.count++;
+      this.initial = this.arr[this.arr.length - this.count - 1];
+      this.bul = false;
+      return true;
+    } else return false;
+  }
 
-    /**
-     * Changes state according to event transition rules.
-     * @param event
-     */
-    trigger(event) {
-        for(let hhh in this.states[this.bbb].transitions){
-            if(hhh===event){
-                this.bbb=this.states[this.bbb].transitions[event];
-                this.arr.push(this.bbb);
-                this.ddd=true;
-                return;
-            }
-        }
-        throw new Error();
-    }
+  redo() {
+    if (!this.bul && this.count > 0) {
+      this.count--;
+      this.initial = this.arr[this.arr.length - this.count - 1];
+      return true;
+    } else return false;
+  }
 
-    /**
-     * Resets FSM state to initial.
-     */
-    reset() {
-        this.bbb="normal";
-        this.arr=[this.bbb];
-    }
-
-    /**
-     * Returns an array of states for which there are specified event transition rules.
-     * Returns all states if argument is undefined.
-     * @param event
-     * @returns {Array}
-     */
-    getStates(event) {
-        let arr2=[];
-        if(arguments.length!=0){
-            for(let sss in this.states){
-                if(this.states[sss].transitions.hasOwnProperty(event)){
-                    arr2.push(sss);                }
-            }
-        }
-        else
-            for(let sss in this.states){
-                arr2.push(sss);
-            }
-
-        return arr2;
-    }
-
-    /**
-     * Goes back to previous state.
-     * Returns false if undo is not available.
-     * @returns {Boolean}
-     */
-    undo() {
-        if((this.arr.length-this.ccc)>1){
-            this.ccc++;
-            this.bbb=this.arr[this.arr.length-1-this.ccc];
-            this.ddd=false;
-            return true;
-        }
-        else return false;
-    }
-
-    /**
-     * Goes redo to state.
-     * Returns false if redo is not available.
-     * @returns {Boolean}
-     */
-    redo() {
-        if((!this.ddd)&&(this.ccc>0)) {
-                this.ccc--;
-                this.bbb=this.arr[this.arr.length-1-this.ccc];
-                return true;
-        }
-        else return false;
-    }
-
-    /**
-     * Clears transition history
-     */
-    clearHistory() {this.arr=[];this.ccc=0;}
+  clearHistory() {
+    this.arr = [];
+    this.count = 0;
+  }
 }
-
-module.exports = FSM;
-
-/** @Created by Uladzimir Halushka **/
-const config = {
-    initial: 'normal',
-    states: {
-        normal: {
-            transitions: {
-                study: 'busy',
-            }
-        },
-        busy: {
-            transitions: {
-                get_tired: 'sleeping',
-                get_hungry: 'hungry',
-            }
-        },
-        hungry: {
-            transitions: {
-                eat: 'normal'
-            },
-        },
-        sleeping: {
-            transitions: {
-                get_hungry: 'hungry',
-                get_up: 'normal',
-            },
-        },
-    }
-};
-
-
-(function(){
-
-            const student = new FSM(config);
-
-            student.trigger('study');
-            console.log(student.getState()+'busy');
-})()
